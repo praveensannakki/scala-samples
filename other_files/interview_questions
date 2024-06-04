@@ -1,0 +1,8 @@
+databricks:
+what is difference betweek partition in hive/spark df
+what decides the partitions in spark
+what are metjods can change the partitions ? repartitions, colease, groupby . while pararrelizing the rdd , in configurations.
+what is difference between stages and tasks
+I read data, select * with where class abd select 1,2,3 from df2 write the data how many stages?
+how do you access internet on private vpc in amazon once started.
+

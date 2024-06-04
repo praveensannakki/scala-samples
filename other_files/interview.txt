@@ -1,0 +1,722 @@
+#interview materials
+https://github.com/RajenDharmendra/SparkQA
+https://github.com/vaquarkhan/vaquarkhan/blob/master/Top%20Answers%20to%20Spark%20Interview%20Questions.docx
+https://github.com/Pushkr/Apache-Spark-Hands-On/blob/master/Questions/hadoop.md
+https://github.com/Pushkr/Apache-Spark-Hands-On
+https://blog.clairvoyantsoft.com/custom-partitioning-spark-datasets-25cbd4e2d818
+https://medium.com/expedia-group-tech/working-with-json-in-apache-spark-1ecf553c2a8c
+https://github.com/spark-examples/spark-scala-examples/blob/master/src/main/scala/com/sparkbyexamples/spark/dataframe/join/JoinMultipleDataFrames.scala
+
+https://opensource.adobe.com/Spry/samples/data_region/JSONDataSetSample.html
+
+You have to extend the org.apache.spark.Partitioner class, in order to use Spark Custom Partitioner and override the below methods:
+numPartitions: This method returns the number of partitions to be created for an RDD
+getPartition(key: Any): This method returns the partition number into which partition the key should go (ranging from 0 to nnumberOfPartitions-1)
+https://gist.github.com/girisandeep/f90e456da6f2381f9c86e8e6bc4e8260
+
+https://timepasstechies.com/spark-custom-partitioner-example-java-scala-tutorial-9/
+
+Create a Java class for the User Defined Function which extends ora.apache.hadoop.hive.sq.exec.UDF and implements more than one evaluate() methods. Put in your desired logic and you are almost there.
+Package your Java class into a JAR file (I am using Maven)
+Go to Hive CLI, add your JAR, and verify your JARs is in the Hive CLI classpath
+CREATE TEMPORARY FUNCTION in Hive which points to your Java class
+Use it in Hive SQL and have fun!
+
+hive> ADD JAR /home/sakthiinfotec/hive-custom-udfs-0.0.1-SNAPSHOT.jar;
+hive> CREATE TEMPORARY FUNCTION to_uppercase as 'com.sakthiinfotec.hive.custom.ToUpperCaseUDF';
+hive> SELECT toUpperCase(first_name) FROM users LIMIT 25;
+
+val arcDf = spark.sql("select * from ea_common.sls_ord_rw where ins_gmt_dt <= DATE_SUB(to_date(current_timestamp),7)")
+
+import org.apache.spark.sql.SaveMode
+spark.sql("SET hive.exec.dynamic.partition = true")
+spark.sql("SET hive.exec.dynamic.partition.mode = nonstrict")
+
+val arcDf = spark.sql("select * from ea_common.sls_ord_rw where ins_gmt_dt>='2021-04-26' and ins_gmt_dt<='2021-05-04'")
+ 
+arcDf.write.mode(SaveMode.Append).format("orc").insertInto("ea_common.sls_ord_rw_arc")
+
+episrcMbrFileTempDf.write.format("com.databricks.spark.csv").option("header", "false").option("delimiter", episrcfiledelimiter).option("nullValue", "").mode("overwrite").save(tempOutboundHDFSLocation)
+
+spark.sql("alter table ea_common.sls_ord_rw drop if exists partition(ins_gmt_dt='2021-04-15'),partition(ins_gmt_dt='2021-04-26'),partition(ins_gmt_dt='2021-04-27'),partition(ins_gmt_dt='2021-04-28'),partition(ins_gmt_dt='2021-04-29'),partition(ins_gmt_dt='2021-04-30'),partition(ins_gmt_dt='2021-05-01'),partition(ins_gmt_dt='2021-05-02'),partition(ins_gmt_dt='2021-05-03'),partition(ins_gmt_dt='2021-05-04')")
+
+spark.sql("alter table ea_common.sls_ord_rw drop if exists partition(ins_gmt_dt='2021-04-20'),partition(ins_gmt_dt='2021-04-21'),partition(ins_gmt_dt='2021-04-22'),partition(ins_gmt_dt='2021-04-23'),partition(ins_gmt_dt='2021-04-24'),partition(ins_gmt_dt='2021-04-25')")
+
+spark.sql("MSCK REPAIR TABLE ea_common.sls_ord_rw")
+spark.sql("MSCK REPAIR TABLE ea_common.sls_ord_rw_arc")
+
+ 
+package com.sakthiinfotec.hive.custom;
+
+import org.apache.hadoop.hive.ql.exec.Description;
+import org.apache.hadoop.hive.ql.exec.UDF;                                                                                                                                                                                                                                                                                                                                                                      
+import org.apache.hadoop.io.Text;
+
+set hive.auto.convert.join=true;
+set hive.vectorized.execution.enabled=true;
+set hive.vectorized.execution.reduce.enabled=true;
+set hive.exec.parallel=true;
+set hive.cbo.enable=true;
+set hive.compute.query.using.stats=true;
+set hive.stats.fetch.column.stats=true;
+set hive.stats.fetch.partition.stats=true;
+set hive.tez.container.size=32768;
+set hive.tez.java.opts=-Xmx26214m;
+set tez.am.resource.memory.mb=32768;
+set mapreduce.input.fileinputformat.split.minsize=125829120;
+SET hive.exec.dynamic.partition = true;
+SET hive.exec.dynamic.partition.mode = nonstrict;
+
+ANALYZE TABLE [table_name] COMPUTE STATISTICS for COLUMNS
+
+
+/**
+ * Custom upper case conversion UDF.
+ *
+ * @author Sakthi
+ */
+@Description(name = "ToUpperCaseUDF", value = "Returns upper case of a given string", extended = "SELECT toUpperCase('Hello World!');")
+public class ToUpperCaseUDF extends UDF {
+
+private Text result = new Text();
+
+public Text evaluate(Text str) {
+if (str == null) {
+return null;
+}
+result.set(str.toString().toUpperCase());
+return result;
+}
+
+}
+
+
+
+Design and Code a cache
+
+How to find loop in linked list write code?
+
+Design a solution regarding an airplane seating plan for a family of 4 with some seats on the plane already reserved.
+
+Big O notation and algorithm assessment.
+
+data structure knowledge
+
+Trasverse a tree
+
+Linked list
+
+
+
+Reverse a linked list.
+
+
+
+Return the k’th last node of a linked list, or NULL if it doesn’t exist.
+
+Find the height of a binary tree.
+
+Given an int, return it as a string without using any library methods to do so. It should work for all values of an integer.
+
+
+
+Find the common ancestor of two nodes in a arbitrary tree.
+
+Reverse a linked list with constant space.
+
+
+
+
+
+Phone interview- 1hr, Interviewer asked lots of question from OS, C++ Data structure, Machine learning, Map reduce, Computer Architecture. He was very fast and mainly looking for right terminology.
+
+balance a binary tree (binary search)
+
+
+
+3 C in Cache?
+
+Tree Vs Graph? Time complexity
+
+D/b relu, tanh sigmoid activation function
+
+Dynamic programming in c++
+
+mutex Vs semaphor
+
+How to decide number of layers in Neural network?
+
+
+
+Advantages/Disadvantages of arrays and linklists.
+
+Given a pointer to node delete linked list.
+
+Linked list insertion, palindrome in LL, add two numbers using LL.
+
+Constructros, Virtual Constructors, DP question,
+
+
+
+Data structure questions like quicksort bubble sort and typical c questions.
+
+
+
+Object oriented programming concepts with examples
+
+Different types of constructors
+
+Delete a Node from linked list
+
+Reverses a linked list
+
+
+
+1. Intersection point of Linked list.
+
+2. Transform an array into stacks
+
+3. Project discussion
+
+4. Operating system concepts thread, process.
+
+5. Breadth first search
+
+6. Depth First search
+
+7. Binary Search trees
+
+
+
+write a function to reverse a string
+
+
+
+Travelling sales man problem.
+
+
+
+How do you detect a loop in a linked list, how do you convert stack to queue.
+
+
+
+Write a function to find the endianess of a machine.
+
+
+
+Algo to find if two Binary Trees are structurally equivalent
+
+
+
+Are you familiar with writing safe and secure web code?
+
+Help create unit test for supposed shopping car object to test different parameters
+
+Coding question with test cases, documentation, etc.
+
+Sorting Algorithms, Trees, Linkedlists, C++
+
+I only got through one round, I was honestly not very prepared. Asked me the stock-sales problem (given an array of stock prices for 14 consecutive days tell me how you will find which day to buy and which day to sell for maximum profit, you can only buy and sell once). Asked me to trasverse a tree and when I asked which way she wouldn't tell me (I think they just cared if you knew one way). All in all the manager was pretty rude and condescending (to be fair partly warranted because I wasn't as prepared as I would have liked). I'd say study the questions on Glassdoor and do some problems on leetcode with an emphasis on trees and searching algorithms. Even though it went horribly it definitely showed me what I needed to focus my studying on which ultimately led me land another role.
+
+
+
+1 telephonic+3 technical Rounds.
+
+Each interview is about 1 hour long.
+
+DS, Algorithms, C++, OOPs.
+
+Went good.
+
+But no response till date, not even a negative response.
+
+But its pretty clear now.
+
+
+
+123 2020-02-03 2020-05-31 N
+123 2020-06-01 2020-08-31 N
+123 2020-09-01 2020-11-30 Y
+123 2020-12-01 2020-12-31 Y
+435 2020-02-03 2020-04-30 Y
+435 2020-06-01 2020-08-31 Y
+
+create table cvs1(id int,start_dt date,end_dt date,ind varchar(1));
+
+insert into cvs1(id,start_dt,end_dt,ind) values(123,'2020-02-03','2020-05-31','N'),(123,'2020-06-01','2020-08-31','N'),(123,'2020-09-01','2020-11-30','Y'),(123,'2020-12-01','2020-12-31','Y'),(435,'2020-02-03','2020-04-30','Y'),(435,'2020-06-01','2020-08-31','Y');
+
+Enter password: ****
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 18
+Server version: 8.0.26 MySQL Community Server - GPL
+
+Copyright (c) 2000, 2021, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+6 rows in set (0.01 sec)
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> create database practice;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> show database;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'database' at line 1
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| practice           |
+| sakila             |
+| sys                |
+| world              |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> use practce;
+ERROR 1049 (42000): Unknown database 'practce'
+mysql> use practice;
+Database changed
+mysql> show tables;
+Empty set (0.01 sec)
+
+mysql> create table cvs1(id int,start_dt date,end_date date,ind varchar(1));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> show tables;
++--------------------+
+| Tables_in_practice |
++--------------------+
+| cvs1               |
++--------------------+
+1 row in set (0.01 sec)
+
+mysql> insert into cvs1(id,start_date,end_date,ind) values(123,'2020-02-03','2020-05-31','N'),(123,'020-06-01','2020-08-31','N'),(123,'2020-09-01','2020-11-30','Y'),(123,'2020-12-01','2020-12-31','Y'),(435,'2020-02-03','2020-04-30','Y'),(435,'2020-06-01','2020-08-31','Y');
+ERROR 1054 (42S22): Unknown column 'start_date' in 'field list'
+mysql> alter table cvs1 rename end_date end_dt;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'end_dt' at line 1
+mysql>
+mysql>
+mysql> alter table cvs1 rename end_date to end_dt;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'to end_dt' at line 1
+mysql> alter table cvs1 rename column end_date to end_dt;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into cvs1(id,start_dt,end_dt,ind) values(123,'2020-02-03','2020-05-31','N'),(123,'020-06-01','2020-08-31','N'),(123,'2020-09-01','2020-11-30','Y'),(123,'2020-12-01','2020-12-31','Y'),(435,'2020-02-03','2020-04-30','Y'),(435,'2020-06-01','2020-08-31','Y')
+    -> ;
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql> select * from cvs1;
++------+------------+------------+------+
+| id   | start_dt   | end_dt     | ind  |
++------+------------+------------+------+
+|  123 | 2020-02-03 | 2020-05-31 | N    |
+|  123 | 0020-06-01 | 2020-08-31 | N    |
+|  123 | 2020-09-01 | 2020-11-30 | Y    |
+|  123 | 2020-12-01 | 2020-12-31 | Y    |
+|  435 | 2020-02-03 | 2020-04-30 | Y    |
+|  435 | 2020-06-01 | 2020-08-31 | Y    |
++------+------------+------------+------+
+6 rows in set (0.00 sec)
+
+mysql> select a.id,a.start_dt,b.end_dt,a.ind from csv1 a join csv1 b on a.id=b.id and datediff(a.end_dt,b.start_dt)=1;
+ERROR 1146 (42S02): Table 'practice.csv1' doesn't exist
+mysql> select a.id,a.start_dt,b.end_dt,a.ind from cvs1 a join cvs1 b on a.id=b.id and datediff(a.end_dt,b.start_dt)=1;
+Empty set (0.00 sec)
+
+mysql> select a.id,a.start_dt,b.end_dt,a.ind from cvs1 a join cvs1 b on a.id=b.id;
++------+------------+------------+------+
+| id   | start_dt   | end_dt     | ind  |
++------+------------+------------+------+
+|  123 | 2020-12-01 | 2020-05-31 | Y    |
+|  123 | 2020-09-01 | 2020-05-31 | Y    |
+|  123 | 0020-06-01 | 2020-05-31 | N    |
+|  123 | 2020-02-03 | 2020-05-31 | N    |
+|  123 | 2020-12-01 | 2020-08-31 | Y    |
+|  123 | 2020-09-01 | 2020-08-31 | Y    |
+|  123 | 0020-06-01 | 2020-08-31 | N    |
+|  123 | 2020-02-03 | 2020-08-31 | N    |
+|  123 | 2020-12-01 | 2020-11-30 | Y    |
+|  123 | 2020-09-01 | 2020-11-30 | Y    |
+|  123 | 0020-06-01 | 2020-11-30 | N    |
+|  123 | 2020-02-03 | 2020-11-30 | N    |
+|  123 | 2020-12-01 | 2020-12-31 | Y    |
+|  123 | 2020-09-01 | 2020-12-31 | Y    |
+|  123 | 0020-06-01 | 2020-12-31 | N    |
+|  123 | 2020-02-03 | 2020-12-31 | N    |
+|  435 | 2020-06-01 | 2020-04-30 | Y    |
+|  435 | 2020-02-03 | 2020-04-30 | Y    |
+|  435 | 2020-06-01 | 2020-08-31 | Y    |
+|  435 | 2020-02-03 | 2020-08-31 | Y    |
++------+------------+------------+------+
+20 rows in set (0.00 sec)
+
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind from cvs1 a join cvs1 b on a.id=b.id;
++------+------------+------------+------+
+| id   | start_dt   | end_dt     | ind  |
++------+------------+------------+------+
+|  123 | 2020-12-01 | 2020-05-31 | Y    |
+|  123 | 2020-09-01 | 2020-05-31 | Y    |
+|  123 | 0020-06-01 | 2020-05-31 | N    |
+|  123 | 2020-02-03 | 2020-05-31 | N    |
+|  123 | 2020-12-01 | 2020-08-31 | Y    |
+|  123 | 2020-09-01 | 2020-08-31 | Y    |
+|  123 | 0020-06-01 | 2020-08-31 | N    |
+|  123 | 2020-02-03 | 2020-08-31 | N    |
+|  123 | 2020-12-01 | 2020-11-30 | Y    |
+|  123 | 2020-09-01 | 2020-11-30 | Y    |
+|  123 | 0020-06-01 | 2020-11-30 | N    |
+|  123 | 2020-02-03 | 2020-11-30 | N    |
+|  123 | 2020-12-01 | 2020-12-31 | Y    |
+|  123 | 2020-09-01 | 2020-12-31 | Y    |
+|  123 | 0020-06-01 | 2020-12-31 | N    |
+|  123 | 2020-02-03 | 2020-12-31 | N    |
+|  435 | 2020-06-01 | 2020-04-30 | Y    |
+|  435 | 2020-02-03 | 2020-04-30 | Y    |
+|  435 | 2020-06-01 | 2020-08-31 | Y    |
+|  435 | 2020-02-03 | 2020-08-31 | Y    |
++------+------------+------------+------+
+20 rows in set (0.00 sec)
+
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.id;
++------+------------+------------+------+-------------------------------+
+| id   | start_dt   | end_dt     | ind  | datediff(b.start_dt,a.end_dt) |
++------+------------+------------+------+-------------------------------+
+|  123 | 2020-12-01 | 2020-05-31 | Y    |                          -332 |
+|  123 | 2020-09-01 | 2020-05-31 | Y    |                          -301 |
+|  123 | 0020-06-01 | 2020-05-31 | N    |                          -210 |
+|  123 | 2020-02-03 | 2020-05-31 | N    |                          -118 |
+|  123 | 2020-12-01 | 2020-08-31 | Y    |                       -730698 |
+|  123 | 2020-09-01 | 2020-08-31 | Y    |                       -730667 |
+|  123 | 0020-06-01 | 2020-08-31 | N    |                       -730576 |
+|  123 | 2020-02-03 | 2020-08-31 | N    |                       -730484 |
+|  123 | 2020-12-01 | 2020-11-30 | Y    |                          -121 |
+|  123 | 2020-09-01 | 2020-11-30 | Y    |                           -90 |
+|  123 | 0020-06-01 | 2020-11-30 | N    |                             1 |
+|  123 | 2020-02-03 | 2020-11-30 | N    |                            93 |
+|  123 | 2020-12-01 | 2020-12-31 | Y    |                           -30 |
+|  123 | 2020-09-01 | 2020-12-31 | Y    |                             1 |
+|  123 | 0020-06-01 | 2020-12-31 | N    |                            92 |
+|  123 | 2020-02-03 | 2020-12-31 | N    |                           184 |
+|  435 | 2020-06-01 | 2020-04-30 | Y    |                          -210 |
+|  435 | 2020-02-03 | 2020-04-30 | Y    |                           -87 |
+|  435 | 2020-06-01 | 2020-08-31 | Y    |                           -91 |
+|  435 | 2020-02-03 | 2020-08-31 | Y    |                            32 |
++------+------------+------------+------+-------------------------------+
+20 rows in set (0.00 sec)
+
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.idand datediff(b.start_dt,a.end_dt)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'datediff(b.start_dt,a.end_dt)=1' at line 1
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.idand datediff(b.start_dt,a.end_dt)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'datediff(b.start_dt,a.end_dt)=1' at line 1
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.idand datediff(b.start_dt,a.end_dt)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'datediff(b.start_dt,a.end_dt)=1' at line 1
+mysql>
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.idwhere datediff(b.start_dt,a.end_dt)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'datediff(b.start_dt,a.end_dt)=1' at line 1
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.idand datediff(b.start_dt,a.end_dt)=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'datediff(b.start_dt,a.end_dt)=1' at line 1
+mysql>
+mysql>
+mysql> select a.id,a.start_dt,b.end_dt,a.ind from cvs1 a join cvs1 b on a.id=b.id and datediff(a.end_dt,b.start_dt)=1;
+Empty set (0.00 sec)
+
+mysql>
+mysql> select a.id,a.start_dt,b.end_dt,a.ind from cvs1 a join cvs1 b on a.id=b.id and datediff(b.start_dt,b.end_dt)=1;
+Empty set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> truncate table cvs1;
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> select * from cvs1;
+Empty set (0.01 sec)
+
+mysql> insert into cvs1(id,start_dt,end_dt,ind) values(123,'2020-02-03','2020-05-31','N'),(123,'2020-06-01','2020-08-31','N'),(123,'2020-09-01','2020-11-30','Y'),(123,'2020-12-01','2020-12-31','Y'),(435,'2020-02-03','2020-04-30','Y'),(435,'2020-06-01','2020-08-31','Y');
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> select * from cvs1;
++------+------------+------------+------+
+| id   | start_dt   | end_dt     | ind  |
++------+------------+------------+------+
+|  123 | 2020-02-03 | 2020-05-31 | N    |
+|  123 | 2020-06-01 | 2020-08-31 | N    |
+|  123 | 2020-09-01 | 2020-11-30 | Y    |
+|  123 | 2020-12-01 | 2020-12-31 | Y    |
+|  435 | 2020-02-03 | 2020-04-30 | Y    |
+|  435 | 2020-06-01 | 2020-08-31 | Y    |
++------+------------+------------+------+
+6 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.id;
++------+------------+------------+------+-------------------------------+
+| id   | start_dt   | end_dt     | ind  | datediff(b.start_dt,a.end_dt) |
++------+------------+------------+------+-------------------------------+
+|  123 | 2020-12-01 | 2020-05-31 | Y    |                          -332 |
+|  123 | 2020-09-01 | 2020-05-31 | Y    |                          -301 |
+|  123 | 2020-06-01 | 2020-05-31 | N    |                          -210 |
+|  123 | 2020-02-03 | 2020-05-31 | N    |                          -118 |
+|  123 | 2020-12-01 | 2020-08-31 | Y    |                          -213 |
+|  123 | 2020-09-01 | 2020-08-31 | Y    |                          -182 |
+|  123 | 2020-06-01 | 2020-08-31 | N    |                           -91 |
+|  123 | 2020-02-03 | 2020-08-31 | N    |                             1 |
+|  123 | 2020-12-01 | 2020-11-30 | Y    |                          -121 |
+|  123 | 2020-09-01 | 2020-11-30 | Y    |                           -90 |
+|  123 | 2020-06-01 | 2020-11-30 | N    |                             1 |
+|  123 | 2020-02-03 | 2020-11-30 | N    |                            93 |
+|  123 | 2020-12-01 | 2020-12-31 | Y    |                           -30 |
+|  123 | 2020-09-01 | 2020-12-31 | Y    |                             1 |
+|  123 | 2020-06-01 | 2020-12-31 | N    |                            92 |
+|  123 | 2020-02-03 | 2020-12-31 | N    |                           184 |
+|  435 | 2020-06-01 | 2020-04-30 | Y    |                          -210 |
+|  435 | 2020-02-03 | 2020-04-30 | Y    |                           -87 |
+|  435 | 2020-06-01 | 2020-08-31 | Y    |                           -91 |
+|  435 | 2020-02-03 | 2020-08-31 | Y    |                            32 |
++------+------------+------------+------+-------------------------------+
+20 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.idand a.ind=b.ind;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'a.ind=b.ind' at line 1
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.idand a.ind=b.ind ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'a.ind=b.ind' at line 1
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind rom cvs1 a join cvs1 b on a.id=b.idand a.ind=b.ind ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cvs1 a join cvs1 b on a.id=b.idand a.ind=b.ind' at line 1
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind rom cvs1 a join cvs1 b on a.id=b.id and a.ind=b.ind;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cvs1 a join cvs1 b on a.id=b.id and a.ind=b.ind' at line 1
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind rom cvs1 a join cvs1 b on a.id=b.id and a.id=b.id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cvs1 a join cvs1 b on a.id=b.id and a.id=b.id' at line 1
+mysql>
+mysql>
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind rom cvs1 a join cvs1 b on a.id=b.id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cvs1 a join cvs1 b on a.id=b.id' at line 1
+mysql>
+mysql>
+mysql> select a.id,a.start_dt,b.end_dt,a.ind rom cvs1 a join cvs1 b on a.id=b.id;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'cvs1 a join cvs1 b on a.id=b.id' at line 1
+mysql>
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.id;
++------+------------+------------+------+-------------------------------+
+| id   | start_dt   | end_dt     | ind  | datediff(b.start_dt,a.end_dt) |
++------+------------+------------+------+-------------------------------+
+|  123 | 2020-12-01 | 2020-05-31 | Y    |                          -332 |
+|  123 | 2020-09-01 | 2020-05-31 | Y    |                          -301 |
+|  123 | 2020-06-01 | 2020-05-31 | N    |                          -210 |
+|  123 | 2020-02-03 | 2020-05-31 | N    |                          -118 |
+|  123 | 2020-12-01 | 2020-08-31 | Y    |                          -213 |
+|  123 | 2020-09-01 | 2020-08-31 | Y    |                          -182 |
+|  123 | 2020-06-01 | 2020-08-31 | N    |                           -91 |
+|  123 | 2020-02-03 | 2020-08-31 | N    |                             1 |
+|  123 | 2020-12-01 | 2020-11-30 | Y    |                          -121 |
+|  123 | 2020-09-01 | 2020-11-30 | Y    |                           -90 |
+|  123 | 2020-06-01 | 2020-11-30 | N    |                             1 |
+|  123 | 2020-02-03 | 2020-11-30 | N    |                            93 |
+|  123 | 2020-12-01 | 2020-12-31 | Y    |                           -30 |
+|  123 | 2020-09-01 | 2020-12-31 | Y    |                             1 |
+|  123 | 2020-06-01 | 2020-12-31 | N    |                            92 |
+|  123 | 2020-02-03 | 2020-12-31 | N    |                           184 |
+|  435 | 2020-06-01 | 2020-04-30 | Y    |                          -210 |
+|  435 | 2020-02-03 | 2020-04-30 | Y    |                           -87 |
+|  435 | 2020-06-01 | 2020-08-31 | Y    |                           -91 |
+|  435 | 2020-02-03 | 2020-08-31 | Y    |                            32 |
++------+------------+------------+------+-------------------------------+
+20 rows in set (0.00 sec)
+
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.id and a.ind=b.ind;
++------+------------+------------+------+-------------------------------+
+| id   | start_dt   | end_dt     | ind  | datediff(b.start_dt,a.end_dt) |
++------+------------+------------+------+-------------------------------+
+|  123 | 2020-06-01 | 2020-05-31 | N    |                          -210 |
+|  123 | 2020-02-03 | 2020-05-31 | N    |                          -118 |
+|  123 | 2020-06-01 | 2020-08-31 | N    |                           -91 |
+|  123 | 2020-02-03 | 2020-08-31 | N    |                             1 |
+|  123 | 2020-12-01 | 2020-11-30 | Y    |                          -121 |
+|  123 | 2020-09-01 | 2020-11-30 | Y    |                           -90 |
+|  123 | 2020-12-01 | 2020-12-31 | Y    |                           -30 |
+|  123 | 2020-09-01 | 2020-12-31 | Y    |                             1 |
+|  435 | 2020-06-01 | 2020-04-30 | Y    |                          -210 |
+|  435 | 2020-02-03 | 2020-04-30 | Y    |                           -87 |
+|  435 | 2020-06-01 | 2020-08-31 | Y    |                           -91 |
+|  435 | 2020-02-03 | 2020-08-31 | Y    |                            32 |
++------+------------+------------+------+-------------------------------+
+12 rows in set (0.00 sec)
+
+mysql>
+mysql>
+mysql>
+mysql> select distinct a.id,a.start_dt,b.end_dt,a.ind,datediff(b.start_dt,a.end_dt) from cvs1 a join cvs1 b on a.id=b.id and a.ind=b.ind and datediff(b.start_dt,a.end_dt)=1;
++------+------------+------------+------+-------------------------------+
+| id   | start_dt   | end_dt     | ind  | datediff(b.start_dt,a.end_dt) |
++------+------------+------------+------+-------------------------------+
+|  123 | 2020-02-03 | 2020-08-31 | N    |                             1 |
+|  123 | 2020-09-01 | 2020-12-31 | Y    |                             1 |
++------+------------+------------+------+-------------------------------+
+2 rows in set (0.00 sec)
+
+mysql> create table mbr1(id int,cluster int,size varchar(5));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> create table mbr2(id int,cluster int,name varchar(10));
+Query OK, 0 rows affected (0.04 sec)
+
+mysql>
+mysql> insert into mbr1 (id,cluster,size) values (123,1,'2x'),(234,2,'3x'),(345,1,'5x');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from mbr1;
++------+---------+------+
+| id   | cluster | size |
++------+---------+------+
+|  123 |       1 | 2x   |
+|  234 |       2 | 3x   |
+|  345 |       1 | 5x   |
++------+---------+------+
+3 rows in set (0.00 sec)
+
+mysql> insert into mbr1 (id,cluster,name) values (123,1,'abc'),(123,1,'vvv'),(123,1,'baba'),(234,2,'xxxx'),(234,2,'yyyy');
+ERROR 1054 (42S22): Unknown column 'name' in 'field list'
+mysql>
+mysql> insert into mbr2 (id,cluster,name) values (123,1,'abc'),(123,1,'vvv'),(123,1,'baba'),(234,2,'xxxx'),(234,2,'yyyy');
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql>
+mysql>
+mysql> select * from mbr2;
++------+---------+------+
+| id   | cluster | name |
++------+---------+------+
+|  123 |       1 | abc  |
+|  123 |       1 | vvv  |
+|  123 |       1 | baba |
+|  234 |       2 | xxxx |
+|  234 |       2 | yyyy |
++------+---------+------+
+5 rows in set (0.01 sec)
+
+mysql> select a.id,a.cluster,a.size,b.name from mbr1 a left join (select id,collect_list(name) as name from mbr2 group by id) b on a.id=b.id;
+ERROR 1305 (42000): FUNCTION practice.collect_list does not exist
+mysql>
+mysql>
+mysql>
+mysql> select a.id,a.cluster,a.size,b.name from mbr1 a left join (select id,GROUP_CONCAT(name) as name from mbr2 group by id) b on a.id=b.id;
++------+---------+------+--------------+
+| id   | cluster | size | name         |
++------+---------+------+--------------+
+|  123 |       1 | 2x   | abc,vvv,baba |
+|  234 |       2 | 3x   | xxxx,yyyy    |
+|  345 |       1 | 5x   | NULL         |
++------+---------+------+--------------+
+3 rows in set (0.00 sec)
+
+mysql>
+mysql> select a.id,a.cluster,a.size,coalesce(b.name,"spaces") from mbr1 a left join (select id,group_concat(name) as name from mbr2 group by id) b on a.id=b.id;
++------+---------+------+---------------------------+
+| id   | cluster | size | coalesce(b.name,"spaces") |
++------+---------+------+---------------------------+
+|  123 |       1 | 2x   | abc,vvv,baba              |
+|  234 |       2 | 3x   | xxxx,yyyy                 |
+|  345 |       1 | 5x   | spaces                    |
++------+---------+------+---------------------------+
+3 rows in set (0.00 sec)
+
+mysql>
+
+**********************
+nohup /usr/hdp/current/spark2-client/bin/spark-submit --master yarn --deploy-mode client --principal srvc_nextgen_hpro@EAPPRD.HPEIT.HPE.COM --keytab /etc/security/keytabs/srvc_nextgen_hpro.keytab --conf spark.app.name=edw_reprocessing_dataload --conf spark.dynamicAllocation.initialExecutors=10 --conf spark.dynamicAllocation.maxExecutors=100 --conf spark.dynamicAllocation.cachedExecutorIdleTimeout=60 --conf spark.dynamicAllocation.enabled=true --files /usr/hdp/current/spark-client/conf/hive-site.xml,/home/srvc_nextgen_hpro/dataload_ord_edw_rw_rank_arc_apr.properties --jars /home/srvc_nextgen_hpro/EAP_DataLoad-2.2.0.jar --executor-cores 5 --driver-memory 50g --executor-memory 20g --queue ea_fin --class com.hpe.batch.driver.e2emonitoring.DataLoad /home/srvc_nextgen_hpro/EAP_DataLoad-2.2.0.jar /home/srvc_nextgen_hpro/dataload_ord_edw_rw_rank_arc_apr.properties> /home/srvc_nextgen_hpro/dataload_ord_edw_rw_rank_arc_apr.properties.log 2>&1 &
+*********************
+
+spark.sql("""select so_id,so_hd_cmpltn_stat_cd,so_dtl_cmpltn_stat_cd,ins_gmt_ts,upd_gmt_ts,ifs_extract_ts,rnk from (select so_id,so_hd_cmpltn_stat_cd,so_dtl_cmpltn_stat_cd,ins_gmt_ts,upd_gmt_ts,ifs_extract_ts,row_number() over (partition by so_id order by ifs_extract_ts desc) as rnk from ea_fin.sls_ord_s4_ref where trim(so_id) in ()) a where rnk<=2 order by ifs_extract_ts desc""").show(300000,false)
+
+val df=spark.sql("select * from ea_fin.sls_blng_s4_processed where upt_gmt_ts>'2021-06-14 00:16:13'") -- 2325
+
+val df_r=df.repartition()
+df.repartition(200).write.mode(SaveMode.Overwrite).format("orc").insertInto("ea_fin.ea_fin.sls_blng_s4_processed_20220621_spark")
+*********************
+
+set hive.enforce.bucketing = true;
+set hive.merge.tezfiles=true;
+set hive.merge.mapfiles=true;
+set hive.merge.mapredfiles=true;
+set hive.merge.size.per.task=128000000;
+set hive.merge.smallfiles.avgsize=128000000;
+
+
+
+
+create table ea_fin.sls_ord_s4_processed_20220621 as  select * from ea_fin.sls_ord_s4_processed; -- application_1650775658485_1577799 12213332,29
+
+insert overwrite table ea_fin.sls_ord_s4_processed select * from ea_fin.sls_ord_s4_processed_20220621;
+
+
+************************recon*******************
+
+spark.sql("select s4_ord_id,s4_ord_type,s4_doc_currency,s4_net_amount,s4_ord_crt_dt,s4_upd_ts,ins_gmt_ts,ins_gmt_dt from ea_common.ord_aud_ref union all select s4_ord_id,s4_ord_type,s4_doc_currency,s4_net_amount,s4_ord_crt_dt,s4_upd_ts,ins_gmt_ts,ins_gmt_dt from ea_common.ord_aud_fact where ins_gmt_dt<(select ins_gmt_dt from ea_common.ord_aud_ref limit 1) and trim(eap_ord_id) is null").count
+
+val recon_df = spark.sql("""select aud.s4_ord_id,aud.s4_ord_type,aud.s4_doc_currency,aud.s4_net_amount,aud.s4_ord_crt_dt,aud.s4_upd_ts,aud.ins_gmt_ts,raw.e1edk01_idoc_dcmt_nr,raw.e1edk14_idoc_org_nm,raw.e1edk01_curr_cd,raw.e1eds01_totl_vl_sum_sgm_nm,raw.e1edk03_025_ido_1_id,raw.crtd_at_ts,raw.ins_gmt_ts,bridge.so_id,bridge.s4_so_type_cd,bridge.lc_cd,bridge.net_amt,bridge.ord_crt_dt,bridge.src_sys_upd_ts,bridge.ifs_extract_ts, aud.ins_gmt_ts,aud.ins_gmt_dt from (select s4_ord_id,s4_ord_type,s4_doc_currency,s4_net_amount,s4_ord_crt_dt,s4_upd_ts,ins_gmt_ts,ins_gmt_dt from ea_common.ord_aud_ref union all select s4_ord_id,s4_ord_type,s4_doc_currency,s4_net_amount,s4_ord_crt_dt,s4_upd_ts,ins_gmt_ts,ins_gmt_dt from ea_common.ord_aud_fact where ins_gmt_dt<(select ins_gmt_dt from ea_common.ord_aud_ref limit 1) and trim(eap_ord_id) is null) aud left join (select ord_hddr_map.e1edk01_idoc_dcmt_nr ,e1edk01_curr_cd ,cast(from_unixtime(unix_timestamp(collect_set(ord_hddr_map.group_map1['025'])[0],'yyyyMMdd'),'yyyy-MM-dd') as date) as e1edk03_025_ido_1_id ,collect_set(ord_hddr_map.group_map2['012'])[0] as e1edk14_idoc_org_nm ,crtd_at_ts ,collect_set(ord_hddr_map.group_map3['002'])[0] as e1eds01_totl_vl_sum_sgm_nm ,ins_gmt_ts from ( select e1edk01_idoc_dcmt_nr ,e1edk01_curr_cd ,map(coalesce(e1edk03_qlfr_idoc_sgm_dt,'#'),e1edk03_ido_1_id) as group_map1 ,map(coalesce(idoc_qualifer_org_id,'#'),e1edk14_idoc_org_nm) as group_map2 ,crtd_at_ts ,map(coalesce(e1eds01_qlfr_totals_sgm_shpg_ntfctn_cd,'#'),e1eds01_totl_vl_sum_sgm_nm) as group_map3 ,ins_gmt_ts ,dense_rank() over(partition by e1edk01_idoc_dcmt_nr order by crtd_at_ts desc) as rnk from ea_common.ord_hddr_rw where ins_gmt_dt>= DATE_SUB(to_date('2022-04-21 22:24:11.274'),3)) AS ord_hddr_map where ord_hddr_map.rnk=1 GROUP BY ord_hddr_map.e1edk01_idoc_dcmt_nr ,ord_hddr_map.e1edk01_curr_cd ,ord_hddr_map.crtd_at_ts ,ord_hddr_map.ins_gmt_ts) raw on trim(aud.s4_ord_id) = trim(raw.e1edk01_idoc_dcmt_nr) left join ( select * from (select *,row_number() over(partition by so_id order by src_sys_upd_ts desc, ifs_extract_ts desc) as rnk from (select dtl.so_id,hdr.s4_so_type_cd,dtl.lc_cd,sum(dtl.net_ext_am) as net_amt,dtl.ord_crt_dt,dtl.src_sys_upd_ts,dtl.ifs_extract_ts from ea_fin.sls_ord_dtl_s4_ref dtl left join ea_fin.sls_ord_s4_ref hdr on trim(dtl.so_id)=trim(hdr.so_id) and trim(dtl.src_sys_upd_ts)=trim(hdr.src_sys_upd_ts) where to_date(dtl.ifs_extract_ts)>=DATE_SUB(to_date('2022-04-21 22:24:11.274'),3) and to_date(hdr.ifs_extract_ts)>=DATE_SUB(to_date('2022-04-21 22:24:11.274'),3) group by dtl.so_id,hdr.s4_so_type_cd,dtl.lc_cd,dtl.ord_crt_dt,dtl.src_sys_upd_ts,dtl.ifs_extract_ts)) where rnk=1 ) bridge on trim(aud.s4_ord_id) = trim(bridge.so_id) union all select * from ea_common.ord_aud_fact where ins_gmt_dt<(select ins_gmt_dt from ea_common.ord_aud_ref limit 1) and trim(eap_ord_id) is not null""")
+
+import org.apache.spark.sql.SaveMode
+spark.sql("SET hive.exec.dynamic.partition = true")
+spark.sql("SET hive.exec.dynamic.partition.mode = nonstrict")
+recon_df.coalesce(1).write.mode(SaveMode.Overwrite).format("orc").insertInto("ea_common.ord_aud_fact_test")
