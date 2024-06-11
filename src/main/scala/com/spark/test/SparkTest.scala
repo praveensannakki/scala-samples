@@ -5,8 +5,8 @@ import org.apache.spark.sql.SparkSession
 object SparkTest {
   def main(args: Array[String]): Unit = {
     
-    val a ="hdfs://EAP-PROD/EA/finance/consumption/bpc_cnsldtn_trsn/000000_0"
-    val b ="hdfs://EAP-PROD/EA/finance/consumption/bpc_cnsldtn_trsn"
+    val a ="hdfs://hive_table_path/bpc_cnsldtn_trsn/000000_0"
+    val b ="hdfs://hive_table_path/bpc_cnsldtn_trsn"
     val propertiesFilePath = String.valueOf(a.trim())
     var objectName         = propertiesFilePath.substring(propertiesFilePath.lastIndexOf("/") +1)
     var fileBasePath       = String.valueOf(b.trim())

@@ -22,7 +22,7 @@ object LeetCodeSQL {
                             .option("delimiter", "|")
                             .csv("sample_data/emp_earnings.csv")
             
-            if(emp.rdd.isEmpty()){
+            if(emp.rdd.isEmpty()) {
               println("Empty Dataframe")
                 return 1;
             }
