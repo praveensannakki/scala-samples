@@ -72,13 +72,5 @@ public class CapgeminiJavaTest {
 
         System.out.println(intList.stream().mapToInt(n ->n+1).average().orElseThrow(NoSuchElementException::new));
 
-
-
-
-
-
-
-
-
     }
 }

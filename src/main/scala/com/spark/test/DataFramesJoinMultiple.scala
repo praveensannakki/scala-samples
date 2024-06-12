@@ -2,13 +2,12 @@ package com.spark.test
 
 import org.apache.spark.sql.SparkSession
 import scala.collection.Seq
-import scala.reflect.api.materializeTypeTag
 
 object DataFramesJoinMultiple extends App {
 
   val spark: SparkSession = SparkSession.builder()
-    .master("local[1]")
-    .appName("SparkByExamples.com")
+    .master("local[*]")
+    .appName("spark data frame joins")
     .getOrCreate()
 
   spark.sparkContext.setLogLevel("ERROR")

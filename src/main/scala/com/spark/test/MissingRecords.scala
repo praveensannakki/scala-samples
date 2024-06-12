@@ -3,10 +3,10 @@ package com.spark.test
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions._
 
-object MisssingRecords {
+object MissingRecords {
   def main(args: Array[String]): Unit = {
 
-    val spark = SparkSession.builder().appName(this.getClass.getSimpleName).config("SPARK_MAJOR_VERSION", "2").getOrCreate()
+    val spark = SparkSession.builder().master("local[*]").appName(this.getClass.getSimpleName).config("SPARK_MAJOR_VERSION", "2").getOrCreate()
 
     val lookupFile = spark.read.format("csv").option("header", "false").option("delimiter", "~").load(args { 0 }).rdd.map(_.mkString(",")).collect()
     
