@@ -10,5 +10,5 @@ How to run and configure
 3. Run the class or objects you are interested in(please pass argument if program requires)
 
 How to build
-mvn clean install
+  mvn clean install
 
