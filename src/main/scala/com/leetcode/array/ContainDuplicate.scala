@@ -1,9 +1,9 @@
-package com.scala.leetcode.array.test
+package com.leetcode.array
 
 object ContainDuplicate {
   def main(args: Array[String]): Unit = {
     println(containsDuplicate(Array(1, 2, 3, 1)))
-    println(containsDuplicate2(Array(1, 2, 3, 1)))
+    println(containsDuplicateSizeCheck(Array(1, 2, 3)))
   }
 
   def containsDuplicate(nums: Array[Int]): Boolean = {
@@ -16,19 +16,10 @@ object ContainDuplicate {
     false
   }
 
-  def containsDuplicate2(nums: Array[Int]): Boolean = {
+  def containsDuplicateSizeCheck(nums: Array[Int]): Boolean = {
     if (nums.size == nums.toSet.size)
       return false
     true
   }
-  
-  def containsDuplicate3(nums: Array[Int]): Boolean = {
-        val numsS = nums.sorted
-        for (i <- 1 until numsS.length ){
-            if(numsS(i) == numsS(i-1)){
-                return true
-            }
-        }
-        false
-    }
+
 }

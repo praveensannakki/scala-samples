@@ -1,9 +1,13 @@
 
-package com.scala.leetcode.array.test
+package com.leetcode.string
 
 import scala.collection.mutable.Stack
 
-object ValidParanthesis extends App {
+/**
+ * 20. Valid Parentheses
+ *
+ */
+object ValidParenthesis extends App {
 
   def isValid(s: String): Boolean = {
     var hm = Map(')' -> '(', ']' -> '[', '}' -> '{')

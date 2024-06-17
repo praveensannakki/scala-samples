@@ -1,4 +1,4 @@
-package com.scala.leetcode.array.test;
+package com.leetcode.array
 
 object TwoSums {
   def main(args: Array[String]): Unit = {
