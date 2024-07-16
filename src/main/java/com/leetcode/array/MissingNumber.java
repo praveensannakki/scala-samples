@@ -1,6 +1,7 @@
 package com.leetcode.array;
 
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 /**
  * 268. Missing Number
@@ -37,7 +38,10 @@ import java.util.Arrays;
 public class MissingNumber {
 
     public static void main(String[] args) {
-        System.out.println("missing number is: " + new MissingNumber().missingNumber(new int[]{1, 2, 3, 4, 6}));
+        System.out.println("missing number is: " + new MissingNumber().missingNumber(new int[]{9,6,4,2,3,5,7,0,1}));
+        System.out.println("missing number with lambda is: " + missingNumberLambda(new int[]{9,6,4,2,3,5,7,0,1}));
+        System.out.println("missing number is: " + new MissingNumber().missingNumber(new int[]{3,0,1}));
+        System.out.println("missing number with lambda is: " + missingNumberLambda(new int[]{3,0,1}));
     }
     public int missingNumber(int[] nums) {
         Arrays.sort(nums);
@@ -53,5 +57,14 @@ public class MissingNumber {
             }
         }
         return -1;
+    }
+
+    public static int missingNumberLambda(int[] nums) {
+        Arrays.sort(nums);
+        // Add the same check here
+        return IntStream.range(0, nums.length)
+                .filter(i -> nums[i] != i)
+                .findFirst()
+                .orElse(nums.length);
     }
 }
